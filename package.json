@@ -1,0 +1,11 @@
+{
+  "name": "luxury-estate",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "dependencies": {
+    "whatsapp-web.js": "latest",
+    "express": "latest",
+    "socket.io": "latest"
+  }
+}
