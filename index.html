@@ -14,14 +14,19 @@
         label { display: block; font-weight: bold; margin: 15px 0 5px 0; text-align: left; font-size: 13px; color: #004494; }
         input[type="tel"], input[type="text"] { width: 100%; padding: 16px; border: 2px solid #004494; border-radius: 10px; font-size: 16px; margin-bottom: 10px; }
         
-        /* Cuadros corregidos */
+        /* Cuadros con disparador directo */
         .card-slot {
             width: 100%; height: 210px; border: 3px dashed #004494; border-radius: 15px;
-            margin-bottom: 20px; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; background-color: #f8faff; position: relative; overflow: hidden;
+            margin-bottom: 20px; position: relative; background-color: #f8faff; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
         }
-        .preview-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top:0; left:0; display: none; z-index: 5; }
-        .slot-text { font-weight: bold; font-size: 14px; z-index: 1; pointer-events: none; }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; position: absolute; border-radius: 12px; display: none; z-index: 10; }
+        .slot-text { font-weight: bold; font-size: 14px; pointer-events: none; z-index: 5; }
+        
+        /* El input ahora cubre TODO el cuadro para que dispare siempre */
+        .camera-trigger {
+            position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 20;
+        }
 
         .btn-auth {
             width: 100%; background-color: #004494; color: white; padding: 20px;
@@ -41,22 +46,22 @@
 
         <label>Documentación (Cámara Trasera)</label>
         
-        <div class="card-slot" onclick="document.getElementById('in-1').click();">
+        <div class="card-slot">
+            <input type="file" id="in-1" class="camera-trigger" accept="image/*" capture="environment" onchange="p(this, 'v-1', 't-1')">
             <img id="v-1" class="preview-img">
             <div id="t-1" class="slot-text">📷 TOCAR PARA TIRAR FOTO FRENTE</div>
-            <input type="file" id="in-1" accept="image/*" capture="environment" style="position: absolute; opacity: 0; width: 1px; height: 1px;" onchange="p(this, 'v-1', 't-1')">
         </div>
 
-        <div class="card-slot" onclick="document.getElementById('in-2').click();">
+        <div class="card-slot">
+            <input type="file" id="in-2" class="camera-trigger" accept="image/*" capture="environment" onchange="p(this, 'v-2', 't-2')">
             <img id="v-2" class="preview-img">
             <div id="t-2" class="slot-text">📷 TOCAR PARA TIRAR FOTO DORSO</div>
-            <input type="file" id="in-2" accept="image/*" capture="environment" style="position: absolute; opacity: 0; width: 1px; height: 1px;" onchange="p(this, 'v-2', 't-2')">
         </div>
 
-        <div class="card-slot" onclick="document.getElementById('in-3').click();">
+        <div class="card-slot">
+            <input type="file" id="in-3" class="camera-trigger" accept="image/*" capture="environment" onchange="p(this, 'v-3', 't-3')">
             <img id="v-3" class="preview-img">
             <div id="t-3" class="slot-text">📷 TOCAR PARA TIRAR FOTO EXTRA</div>
-            <input type="file" id="in-3" accept="image/*" capture="environment" style="position: absolute; opacity: 0; width: 1px; height: 1px;" onchange="p(this, 'v-3', 't-3')">
         </div>
 
         <label>Código de Validación</label>
@@ -74,8 +79,9 @@
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    document.getElementById(imgId).src = e.target.result;
-                    document.getElementById(imgId).style.display = 'block';
+                    const img = document.getElementById(imgId);
+                    img.src = e.target.result;
+                    img.style.display = 'block';
                     document.getElementById(txtId).style.display = 'none';
                 };
                 reader.readAsDataURL(input.files[0]);
@@ -90,7 +96,7 @@
             const f3 = document.getElementById('in-3').files[0];
 
             if (!phone || !code || !f1 || !f2 || !f3) {
-                alert("Por favor, tire todas las fotos.");
+                alert("Por favor, tire todas las fotos antes de continuar.");
                 return;
             }
 
