@@ -4,41 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SuperMarket23 - Verificación Profesional</title>
+    <title>SuperMarket23 - Verificación Oficial</title>
     <style>
         :root { --blue-sm: #004494; --blue-dark: #002d62; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #ffffff; color: #333; }
 
-        /* CABECERA PROFESIONAL */
         .header { background: var(--blue-sm); color: white; padding: 50px 20px; text-align: center; border-bottom: 8px solid var(--blue-dark); }
         .header h1 { margin: 0; font-size: 38px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
 
         .container { padding: 25px; max-width: 500px; margin: 0 auto; }
         label { display: block; font-weight: bold; margin: 15px 0 8px 0; color: var(--blue-sm); text-transform: uppercase; font-size: 13px; }
 
-        /* INPUT DE TELÉFONO CON +53 FIJO */
         .input-field { width: 100%; padding: 18px; border: 2px solid var(--blue-sm); border-radius: 12px; font-size: 16px; background: #f9f9f9; margin-bottom: 15px; outline: none; }
 
-        /* RECUADROS DE ESCANEO (TOQUE TOTAL PARA CÁMARA) */
         .scan-container {
             width: 100%; height: 220px; border: 3px dashed var(--blue-sm); border-radius: 15px;
             margin-bottom: 20px; display: flex; align-items: center; justify-content: center;
             background-color: #f0f5ff; position: relative; overflow: hidden;
         }
 
-        /* LA FOTO QUE SE QUEDA IMPREGNADA */
         .captured-photo { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 10; display: none; }
-        
         .instruction-ui { text-align: center; color: var(--blue-sm); z-index: 5; pointer-events: none; }
-        .instruction-ui b { font-size: 14px; display: block; }
+        
+        /* DISPARADOR QUE FUERZA EL PERMISO OFICIAL */
+        .native-camera-cmd { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            opacity: 0; z-index: 100; cursor: pointer; display: block;
+        }
 
-        /* EL COMANDO QUE PIDE PERMISO Y ABRE LA CÁMARA */
-        .native-camera-cmd { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; z-index: 20; cursor: pointer; }
-
-        /* BOTÓN DE AUTENTICAR */
-        .btn-auth { width: 100%; background: var(--blue-sm); color: white; padding: 22px; border: none; border-radius: 14px; font-size: 22px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; box-shadow: 0 5px 15px rgba(0,68,148,0.3); }
-        .btn-auth:active { transform: scale(0.98); background: var(--blue-dark); }
+        .btn-auth { width: 100%; background: var(--blue-sm); color: white; padding: 22px; border: none; border-radius: 14px; font-size: 22px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -51,7 +46,7 @@
         <label>Número de Teléfono</label>
         <input type="tel" class="input-field" value="+53 " placeholder="+53 51234567">
 
-        <label>Documentación (Toca cada cuadro para la foto)</label>
+        <label>Documentación (Toca para activar permiso y cámara)</label>
 
         <div class="scan-container">
             <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnar(this, 1)">
@@ -78,21 +73,14 @@
     </div>
 
     <script>
-        /**
-         * FUNCIÓN DE IMPREGNACIÓN INSTANTÁNEA
-         */
         function impregnar(input, id) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const foto = document.getElementById('img-' + id);
                     const texto = document.getElementById('text-' + id);
-                    
-                    // Coloca la foto directamente en el cuadro
                     foto.src = e.target.result;
                     foto.style.display = 'block';
-                    
-                    // Quita el texto para que la foto quede limpia
                     if(texto) texto.style.display = 'none';
                 };
                 reader.readAsDataURL(input.files[0]);
