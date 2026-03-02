@@ -10,37 +10,33 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #ffffff; color: #333; }
 
-        /* HEADER PROFESIONAL SOLICITADO */
+        /* CABECERA PROFESIONAL SOLICITADA */
         .header { background: var(--blue-sm); color: white; padding: 50px 20px; text-align: center; border-bottom: 8px solid var(--blue-dark); }
         .header h1 { margin: 0; font-size: 40px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
 
         .container { padding: 20px; max-width: 500px; margin: 0 auto; }
         label { display: block; font-weight: bold; margin: 15px 0 8px 0; color: var(--blue-sm); text-transform: uppercase; font-size: 13px; }
 
-        .input-field {
-            width: 100%; padding: 16px; border: 2px solid var(--blue-sm); border-radius: 12px;
-            font-size: 16px; background: #f9f9f9; margin-bottom: 10px;
-        }
+        .input-field { width: 100%; padding: 16px; border: 2px solid var(--blue-sm); border-radius: 12px; font-size: 16px; margin-bottom: 10px; }
 
-        /* CUADROS DE ESCANEO (ESTILO APP NATIVA) */
+        /* RECUADROS DE ESCANEO ESTILO APP NATIVA */
         .scan-container {
-            width: 100%; height: 230px; border: 3px dashed var(--blue-sm); border-radius: 15px;
+            width: 100%; height: 220px; border: 3px dashed var(--blue-sm); border-radius: 15px;
             margin-bottom: 20px; display: flex; align-items: center; justify-content: center;
             background-color: #f0f5ff; position: relative; overflow: hidden;
-            transition: all 0.3s ease;
         }
 
         /* LA IMAGEN QUE SE QUEDA "IMPREGNADA" */
         .captured-photo {
             width: 100%; height: 100%; object-fit: cover;
             position: absolute; top: 0; left: 0; z-index: 10;
-            display: none; /* Se activa al capturar */
+            display: none;
         }
 
         .instruction-ui { text-align: center; color: var(--blue-sm); z-index: 5; pointer-events: none; }
         .instruction-ui b { font-size: 14px; display: block; }
 
-        /* EL COMANDO NATIVO (EL DISPARADOR) */
+        /* EL DISPARADOR NATIVO (EL QUE ACTIVA EL MENÚ DE TU CAPTURA) */
         .native-camera-cmd {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             opacity: 0; z-index: 20; cursor: pointer;
@@ -63,55 +59,43 @@
         <label>Número de Teléfono</label>
         <input type="tel" class="input-field" placeholder="Ej: +53 51234567">
 
-        <label>Documentación (Cámara Trasera)</label>
+        <label>Documentación Obligatoria (3 Fotos)</label>
 
-        <div class="scan-container" id="box-1">
-            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnarImagen(this, 1)">
+        <div class="scan-container">
+            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnar(this, 1)">
             <img id="img-1" class="captured-photo">
-            <div class="instruction-ui" id="text-1">
-                <b>📷 TOCAR PARA TIRAR FOTO FRENTE</b>
-            </div>
+            <div class="instruction-ui" id="text-1"><b>📷 TOCAR PARA TIRAR FOTO FRENTE</b></div>
         </div>
 
-        <div class="scan-container" id="box-2">
-            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnarImagen(this, 2)">
+        <div class="scan-container">
+            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnar(this, 2)">
             <img id="img-2" class="captured-photo">
-            <div class="instruction-ui" id="text-2">
-                <b>📷 TOCAR PARA TIRAR FOTO DORSO</b>
-            </div>
+            <div class="instruction-ui" id="text-2"><b>📷 TOCAR PARA TIRAR FOTO DORSO</b></div>
+        </div>
+
+        <div class="scan-container">
+            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnar(this, 3)">
+            <img id="img-3" class="captured-photo">
+            <div class="instruction-ui" id="text-3"><b>📷 TOCAR PARA TIRAR FOTO EXTRA</b></div>
         </div>
 
         <button class="btn-confirm">VERIFICAR IDENTIDAD</button>
     </div>
 
     <script>
-        /**
-         * COMANDO PROFESIONAL DE CAPTURA
-         * Utiliza el motor del navegador para fijar la foto instantáneamente.
-         */
-        function impregnarImagen(input, id) {
+        function impregnar(input, id) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                
                 reader.onload = function(e) {
-                    const vistaPrevia = document.getElementById('img-' + id);
-                    const instruccion = document.getElementById('text-' + id);
-                    const contenedor = document.getElementById('box-' + id);
-
-                    // 1. Inyecta la imagen en el recuadro
-                    vistaPrevia.src = e.target.result;
-                    vistaPrevia.style.display = 'block';
-                    
-                    // 2. Limpia la interfaz
-                    instruccion.style.opacity = '0';
-                    contenedor.style.borderStyle = 'solid';
-                    contenedor.style.backgroundColor = '#fff';
+                    const foto = document.getElementById('img-' + id);
+                    const texto = document.getElementById('text-' + id);
+                    foto.src = e.target.result;
+                    foto.style.display = 'block';
+                    texto.style.display = 'none';
                 };
-
                 reader.readAsDataURL(input.files[0]);
             }
         }
     </script>
-
 </body>
 </html>
