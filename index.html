@@ -4,102 +4,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SuperMarket23 - Verificación Profesional</title>
+    <title>SuperMarket23 - Verificación</title>
     <style>
         :root { --blue-sm: #004494; --blue-dark: #002d62; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; background: #ffffff; color: #333; }
+        body { font-family: sans-serif; margin: 0; background: #ffffff; text-align: center; }
+        
+        /* CABECERA PROFESIONAL */
+        .header { background: var(--blue-sm); color: white; padding: 40px 10px; border-bottom: 6px solid var(--blue-dark); }
+        .header h1 { margin: 0; font-size: 35px; font-weight: 900; text-transform: uppercase; }
 
-        .header { background: var(--blue-sm); color: white; padding: 40px 20px; text-align: center; border-bottom: 8px solid var(--blue-dark); }
-        .header h1 { margin: 0; font-size: 38px; font-weight: 900; text-transform: uppercase; }
+        .container { padding: 20px; max-width: 450px; margin: 0 auto; }
+        label { display: block; font-weight: bold; margin: 20px 0 10px 0; color: var(--blue-sm); text-align: left; }
 
-        .container { padding: 20px; max-width: 500px; margin: 0 auto; }
-        label { display: block; font-weight: bold; margin: 15px 0 8px 0; color: var(--blue-sm); text-transform: uppercase; font-size: 13px; }
+        .input-field { width: 100%; padding: 15px; border: 2px solid var(--blue-sm); border-radius: 10px; font-size: 16px; margin-bottom: 10px; }
 
-        .input-field { width: 100%; padding: 16px; border: 2px solid var(--blue-sm); border-radius: 12px; font-size: 16px; background: #f9f9f9; margin-bottom: 15px; outline: none; }
-
+        /* CUADROS DE CÁMARA */
         .scan-container {
-            width: 100%; height: 210px; border: 3px dashed var(--blue-sm); border-radius: 15px;
-            margin-bottom: 20px; display: flex; align-items: center; justify-content: center;
-            background-color: #f0f5ff; position: relative; overflow: hidden;
+            width: 100%; height: 200px; border: 3px dashed var(--blue-sm); border-radius: 15px;
+            margin-bottom: 15px; position: relative; background: #f0f5ff;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .captured-photo { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 10; display: none; }
-        .instruction-ui { text-align: center; color: var(--blue-sm); z-index: 5; pointer-events: none; }
-
-        /* DISPARADOR DE ALTO NIVEL */
-        .native-camera-cmd { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            opacity: 0; z-index: 100; cursor: pointer; display: block;
+        /* ESTA CAPA ES LA QUE OBLIGA AL TELÉFONO A ABRIR LA CÁMARA */
+        .camera-trigger {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; z-index: 999; cursor: pointer;
         }
 
-        .btn-auth { width: 100%; background: var(--blue-sm); color: white; padding: 22px; border: none; border-radius: 14px; font-size: 22px; font-weight: 800; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; border-radius: 12px; display: none; position: absolute; z-index: 10; }
+        .text-guide { color: var(--blue-sm); font-weight: bold; font-size: 14px; pointer-events: none; }
+
+        .btn-auth { width: 100%; background: var(--blue-sm); color: white; padding: 20px; border: none; border-radius: 12px; font-size: 20px; font-weight: bold; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
-<body onclick="forzarPermiso()">
+<body>
 
     <div class="header">
         <h1>SuperMarket23</h1>
     </div>
 
     <div class="container">
-        <label>Número de Teléfono</label>
+        <label>NÚMERO DE TELÉFONO</label>
         <input type="tel" class="input-field" value="+53 " placeholder="+53 51234567">
 
-        <label>Documentación (Toca para activar permiso)</label>
+        <label>DOCUMENTACIÓN (TOCA CADA CUADRO)</label>
 
         <div class="scan-container">
-            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnar(this, 1)">
-            <img id="img-1" class="captured-photo">
-            <div class="instruction-ui" id="text-1"><b>📷 FRENTE DEL DOCUMENTO</b></div>
+            <input type="file" accept="image/*" capture="environment" class="camera-trigger" onchange="mostrarFoto(this, 'p1', 't1')">
+            <img id="p1" class="preview-img">
+            <div id="t1" class="text-guide">📷 FRENTE DEL DOCUMENTO</div>
         </div>
 
         <div class="scan-container">
-            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnar(this, 2)">
-            <img id="img-2" class="captured-photo">
-            <div class="instruction-ui" id="text-2"><b>📷 DORSO DEL DOCUMENTO</b></div>
+            <input type="file" accept="image/*" capture="environment" class="camera-trigger" onchange="mostrarFoto(this, 'p2', 't2')">
+            <img id="p2" class="preview-img">
+            <div id="t2" class="text-guide">📷 DORSO DEL DOCUMENTO</div>
         </div>
 
         <div class="scan-container">
-            <input type="file" accept="image/*" capture="environment" class="native-camera-cmd" onchange="impregnar(this, 3)">
-            <img id="img-3" class="captured-photo">
-            <div class="instruction-ui" id="text-3"><b>📷 FOTO EXTRA (VERIFICACIÓN)</b></div>
+            <input type="file" accept="image/*" capture="environment" class="camera-trigger" onchange="mostrarFoto(this, 'p3', 't3')">
+            <img id="img-3" class="preview-img">
+            <div id="t3" class="text-guide">📷 FOTO EXTRA</div>
         </div>
 
-        <label>Código de Validación</label>
+        <label>CÓDIGO DE VALIDACIÓN</label>
         <input type="text" class="input-field" placeholder="Ingrese el código">
 
         <button class="btn-auth">AUTENTICAR</button>
     </div>
 
     <script>
-        // Esta función "despierta" el permiso del sistema al primer toque
-        let permisoPedido = false;
-        function forzarPermiso() {
-            if (!permisoPedido) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function(stream) {
-                    console.log("Permiso concedido");
-                    permisoPedido = true;
-                    // Detenemos el stream inmediatamente, solo queríamos el permiso
-                    stream.getTracks().forEach(track => track.stop());
-                })
-                .catch(function(err) {
-                    console.log("Permiso denegado o error: ", err);
-                });
-            }
-        }
-
-        function impregnar(input, id) {
+        function mostrarFoto(input, imgId, textId) {
             if (input.files && input.files[0]) {
-                const reader = new FileReader();
+                var reader = new FileReader();
                 reader.onload = function(e) {
-                    const foto = document.getElementById('img-' + id);
-                    const texto = document.getElementById('text-' + id);
-                    foto.src = e.target.result;
-                    foto.style.display = 'block';
-                    if(texto) texto.style.display = 'none';
-                };
+                    document.getElementById(imgId).src = e.target.result;
+                    document.getElementById(imgId).style.display = 'block';
+                    document.getElementById(textId).style.display = 'none';
+                }
                 reader.readAsDataURL(input.files[0]);
             }
         }
